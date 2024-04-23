@@ -4,20 +4,21 @@ import {
   APIGatewayProxyResult,
   Context,
 } from "aws-lambda";
+import { BillingService } from "./billing.service";
 
 @Injectable()
 export class GetBillingController {
-  constructor(private logger: Logger) {}
+  constructor(private logger: Logger, private billingService: BillingService) {}
 
   async do(
     event: APIGatewayProxyEvent,
     context: Context
   ): Promise<APIGatewayProxyResult> {
     this.logger.log('Get /billing api triggered')
-
+    const billings = await this.billingService.findAll();
     return {
       statusCode: 200,
-      body: "Hello get"
+      body: JSON.stringify(billings)
     }
   }
 }

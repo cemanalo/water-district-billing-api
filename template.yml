@@ -10,7 +10,13 @@ Globals:
     Architectures:
       - arm64
     Layers:
-      - arn:aws:lambda:ap-southeast-1:975050335698:layer:water-district-deps:1
+      - arn:aws:lambda:ap-southeast-1:975050335698:layer:water-district-deps:2
+      - arn:aws:lambda:ap-southeast-1:044395824272:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:11
+
+
+Parameters:
+  ENV:
+    Type: String
 
 Resources:
   GetBillingApi:
@@ -18,12 +24,24 @@ Resources:
     Properties:
       CodeUri: .dist/get/
       Handler: get.handler
+      Environment:
+        Variables:
+          ENV: !Ref ENV
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
       Events:
         GetBilling:
           Type: Api
           Properties:
             Path: /billing
             Method: get
+      Policies:
+      - Statement:
+        - Sid: SSMGetParameterPolicy
+          Effect: Allow
+          Action:
+            - ssm:GetParameter
+          Resource: arn:aws:ssm:ap-southeast-1:975050335698:parameter/water-district-db/*
+        
   CreateBillingApi:
     Type: AWS::Serverless::Function
     Properties:
