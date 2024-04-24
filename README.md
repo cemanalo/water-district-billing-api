@@ -36,7 +36,10 @@ make _deps
 ```bash
 make _start
 ```
+
+#### Sample endpoints
 Mounting GetBillingApi at http://127.0.0.1:3000/billing [GET]
+
 Mounting CreateBillingApi at http://127.0.0.1:3000/billing [POST]
 
 
