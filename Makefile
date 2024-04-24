@@ -18,3 +18,9 @@ _build:
 
 _deploy:
 	npm run deploy
+
+_start:
+	npm run start
+
+_deps:
+	npm run install

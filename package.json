@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "nest build --builder webpack && sam build",
+    "start": "sam local start-api --env-vars env.json",
     "deploy": "sam deploy --no-confirm-changeset --parameter-overrides ENV=dev"
   },
   "keywords": [
