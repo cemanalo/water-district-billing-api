@@ -5,12 +5,16 @@ Description: >
 
 Globals:
   Function:
+    Environment:
+      Variables:
+        ENV: !Ref ENV
+        NODE_TLS_REJECT_UNAUTHORIZED: 0
     Timeout: 30
     Runtime: nodejs20.x
     Architectures:
       - arm64
     Layers:
-      - arn:aws:lambda:ap-southeast-1:975050335698:layer:water-district-deps:2
+      - arn:aws:lambda:ap-southeast-1:975050335698:layer:water-district-deps:3
       - arn:aws:lambda:ap-southeast-1:044395824272:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:11
 
 
@@ -24,15 +28,11 @@ Resources:
     Properties:
       CodeUri: .dist/get/
       Handler: get.handler
-      Environment:
-        Variables:
-          ENV: !Ref ENV
-          NODE_TLS_REJECT_UNAUTHORIZED: 0
       Events:
         GetBilling:
           Type: Api
           Properties:
-            Path: /billing
+            Path: /billings
             Method: get
       Policies:
       - Statement:
@@ -51,5 +51,12 @@ Resources:
         CreateBilling:
           Type: Api
           Properties:
-            Path: /billing
+            Path: /billings
             Method: post
+      Policies:
+      - Statement:
+        - Sid: SSMGetParameterPolicy
+          Effect: Allow
+          Action:
+            - ssm:GetParameter
+          Resource: arn:aws:ssm:ap-southeast-1:975050335698:parameter/water-district-db/*

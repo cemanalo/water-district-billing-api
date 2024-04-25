@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
+    "outDir": ".out/",
     "noImplicitAny": true,
     "module": "ES2022",
     "target": "ES2021",
@@ -10,5 +10,12 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true
+  },
+  "ts-node": {
+    // these options are overrides used only by ts-node
+    // same as the --compilerOptions flag and the TS_NODE_COMPILER_OPTIONS environment variable
+    "compilerOptions": {
+      "module": "commonjs"
+    }
   }
 }
