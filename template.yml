@@ -41,6 +41,25 @@ Resources:
           Action:
             - ssm:GetParameter
           Resource: arn:aws:ssm:ap-southeast-1:975050335698:parameter/water-district-db/*
+
+  GetBillingByIdApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .dist/getById/
+      Handler: getById.handler
+      Events:
+        GetBilling:
+          Type: Api
+          Properties:
+            Path: /billings/{id}
+            Method: get
+      Policies:
+      - Statement:
+        - Sid: SSMGetParameterPolicy
+          Effect: Allow
+          Action:
+            - ssm:GetParameter
+          Resource: arn:aws:ssm:ap-southeast-1:975050335698:parameter/water-district-db/*
         
   CreateBillingApi:
     Type: AWS::Serverless::Function

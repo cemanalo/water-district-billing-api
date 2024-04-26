@@ -18,7 +18,7 @@ export class BillingService {
     return this.billingRepository.find();
   }
 
-  async findOne(id: number): Promise<Billing> {
+  async findOneById(id: number): Promise<Billing> {
     return this.billingRepository.findOneBy({ id });
   }
 
