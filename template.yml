@@ -60,6 +60,25 @@ Resources:
           Action:
             - ssm:GetParameter
           Resource: arn:aws:ssm:ap-southeast-1:975050335698:parameter/water-district-db/*
+
+  DeleteBillingByIdApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .dist/deleteById/
+      Handler: deleteById.handler
+      Events:
+        GetBilling:
+          Type: Api
+          Properties:
+            Path: /billings/{id}
+            Method: delete
+      Policies:
+      - Statement:
+        - Sid: SSMGetParameterPolicy
+          Effect: Allow
+          Action:
+            - ssm:GetParameter
+          Resource: arn:aws:ssm:ap-southeast-1:975050335698:parameter/water-district-db/*
         
   CreateBillingApi:
     Type: AWS::Serverless::Function
