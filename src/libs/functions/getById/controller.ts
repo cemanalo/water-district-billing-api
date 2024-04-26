@@ -5,6 +5,7 @@ import {
   APIGatewayProxyResult,
   Context,
 } from "aws-lambda";
+import { validateNumber } from "../../utils/validation.util";
 
 @Injectable()
 export class GetBillingByIdController {
@@ -18,7 +19,7 @@ export class GetBillingByIdController {
     this.logger.log(JSON.stringify(event));
 
     const id = event.pathParameters.id;
-    this.validate(id);
+    validateNumber(id);
 
     const billing = await this.billingService.findOneById(Number(id));
 
@@ -26,15 +27,5 @@ export class GetBillingByIdController {
       statusCode: 200,
       body: JSON.stringify(billing),
     };
-  }
-
-  validate(id: string) {
-    if (!id) {
-      throw new Error("Id is required");
-    }
-
-    if (!Number.isInteger(Number(id))) {
-      throw new Error("Id must be a number");
-    }
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Billing } from "../entities/billing.entity";
-import { DataSource, DeleteResult, Repository } from "typeorm";
+import { DataSource, DeleteResult, Repository, UpdateResult } from "typeorm";
 
 @Injectable()
 export class BillingService {
@@ -30,7 +30,7 @@ export class BillingService {
     return this.billingRepository.findBy({ fk_account_id: accountId });
   }
 
-  async patchById(id: number, billing: Billing): Promise<Billing> {
-    return this.billingRepository.save({ id, ...billing });
+  async patchById(id: number, billing: Billing): Promise<UpdateResult> {
+    return this.billingRepository.update({ id }, billing);
   }
 }
