@@ -17,12 +17,21 @@ Globals:
       - arn:aws:lambda:ap-southeast-1:975050335698:layer:water-district-deps:3
       - arn:aws:lambda:ap-southeast-1:044395824272:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:11
 
-
 Parameters:
   ENV:
     Type: String
 
 Resources:
+  WaterDistrictBillingApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      ApiKeySourceType: HEADER
+      Auth:
+        ApiKeyRequired: true
+        UsagePlan:
+          CreateUsagePlan: SHARED
+
   GetBillingApi:
     Type: AWS::Serverless::Function
     Properties:
@@ -34,6 +43,7 @@ Resources:
           Properties:
             Path: /billings
             Method: get
+            RestApiId: !Ref WaterDistrictBillingApi
       Policies:
       - Statement:
         - Sid: SSMGetParameterPolicy
@@ -53,6 +63,9 @@ Resources:
           Properties:
             Path: /billings/{id}
             Method: get
+            RestApiId: !Ref WaterDistrictBillingApi
+            Auth:
+              ApiKeyRequired: true
       Policies:
       - Statement:
         - Sid: SSMGetParameterPolicy
@@ -67,11 +80,14 @@ Resources:
       CodeUri: .dist/deleteById/
       Handler: deleteById.handler
       Events:
-        GetBilling:
+        DeleteBilling:
           Type: Api
           Properties:
             Path: /billings/{id}
             Method: delete
+            RestApiId: !Ref WaterDistrictBillingApi
+            Auth:
+              ApiKeyRequired: true
       Policies:
       - Statement:
         - Sid: SSMGetParameterPolicy
@@ -80,17 +96,20 @@ Resources:
             - ssm:GetParameter
           Resource: arn:aws:ssm:ap-southeast-1:975050335698:parameter/water-district-db/*
 
-  DeleteBillingByIdApi:
+  PatchBillingByIdApi:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: .dist/patchById/
       Handler: patchById.handler
       Events:
-        GetBilling:
+        PatchBilling:
           Type: Api
           Properties:
             Path: /billings/{id}
             Method: patch
+            RestApiId: !Ref WaterDistrictBillingApi
+            Auth:
+              ApiKeyRequired: true
       Policies:
       - Statement:
         - Sid: SSMGetParameterPolicy
@@ -110,6 +129,9 @@ Resources:
           Properties:
             Path: /billings
             Method: post
+            RestApiId: !Ref WaterDistrictBillingApi
+            Auth:
+              ApiKeyRequired: true
       Policies:
       - Statement:
         - Sid: SSMGetParameterPolicy
