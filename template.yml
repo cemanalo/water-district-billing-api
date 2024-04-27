@@ -5,6 +5,10 @@ Description: >
 
 Globals:
   Function:
+    Tags:
+      ENV: !Ref ENV
+      PROJECT: water-district
+      SERVICE: billing-api
     Environment:
       Variables:
         ENV: !Ref ENV
